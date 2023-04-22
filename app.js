@@ -4,14 +4,14 @@ const cors = require("cors");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
+app.set("trust proxy", true);
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/api", (req, res) => {
-  const ip = req.socket.remoteAddress;
+  const ip = req.ip;
   const userAgent = req.headers["user-agent"];
   const model = userAgent.match(/\((.*?)\)/);
   const data = {
