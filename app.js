@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const app = express();
-
+const satelize = require("satelize");
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.set("trust proxy", true);
 app.use(logger(formatsLogger));
@@ -14,12 +14,19 @@ app.get("/api", (req, res) => {
   const ip = req.ip;
   const userAgent = req.headers["user-agent"];
   const model = userAgent.match(/\((.*?)\)/);
-  const data = {
-    ip,
-    userAgent,
-    model,
-  };
-  res.json(data);
+  satelize.satelize({
+    ip: ip,
+    function(err, payload) {
+      const data = {
+        ip,
+        payload,
+        userAgent,
+        model,
+      };
+      console.log(payload);
+      res.json(data);
+    },
+  });
 });
 
 app.use((req, res) => {
