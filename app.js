@@ -12,6 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get("/api", (req, res) => {
   const ip = req.ip;
+  console.log(req.ip);
   const userAgent = req.headers["user-agent"];
   const model = userAgent.match(/\((.*?)\)/);
   const data = {
